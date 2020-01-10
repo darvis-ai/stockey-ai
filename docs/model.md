@@ -29,9 +29,13 @@ tree of top k-results.
 
 
 
-## Seq2Seq Model
+## Encoder
 
-the sequence to sequence model contains from 2 parts encoder and decoder 
+the sequence to sequence2sequence model contains from 2 parts encoder and decoder 
+at first we start with encoder :
+* LSTM layer with return state = True
+* Put Model input inside encoder and the output will be (encoder_output,state_h,state_c)
+* merge all states inside states array [ state_h,state_c ] 
 
 ```python
 
@@ -51,5 +55,20 @@ the sequence to sequence model contains from 2 parts encoder and decoder
     encoder_outputs, state_h, state_c = encoder(encoder_inputs)
     states = [state_h, state_c]
 
+
+```
+## Reshaper
+we will use this reshaper for  
+
+
+```python
+
+    # Decoder
+    reshapor = Reshape((1, 100), name='reshapor')
+    decoder = LSTM(units=100, return_sequences=True, return_state=True, name='decoder')
+
+    # Densor
+    #tdensor = TimeDistributed(Dense(units=200, activation='linear', name='time_densor'))
+    densor_output = Dense(units=feature_len, activation='linear', name='output')
 
 ```

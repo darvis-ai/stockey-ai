@@ -22,16 +22,15 @@ const users = [
 
 const siteConfig = {
   title: 'Stockey.ai', // Title for your website.
-  tagline: 'A website for testing',
-  url: 'https://your-docusaurus-test-site.com', // Your website URL
-  baseUrl: '/', // Base URL for your project */
+  tagline: 'Seq2seq Stock Prediction Api',
+  url: 'https://darvis-ai.github.io/stockey-ai/', // Your website URL
   // For github.io type URLs, you would set the url and baseUrl like:
-  //   url: 'https://facebook.github.io',
-  //   baseUrl: '/test-site/',
+  url: 'https://darvis-ai.github.io',
+  baseUrl: '/stockey-ai/',
 
   // Used for publishing and more
-  projectName: 'test-site',
-  organizationName: 'facebook',
+  projectName: 'Stockey.ai',
+  organizationName: 'darvis-ai',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
