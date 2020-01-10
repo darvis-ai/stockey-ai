@@ -1,0 +1,10 @@
+{
+  "docs": {
+    "Data Provider": ["read","write"],
+    "Data Preparing ": ["utils"],
+    "Seq2Seq": ["model"]
+  },
+  "docs-other": {
+    "First Category": ["doc4", "doc5"]
+  }
+}
