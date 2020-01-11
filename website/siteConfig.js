@@ -23,10 +23,10 @@ const users = [
 const siteConfig = {
   title: 'Stockey.ai', // Title for your website.
   tagline: 'Seq2seq Stock Prediction Api',
-  url: 'https://darvis-ai.github.io/stockey-ai/', // Your website URL
+  //url: 'https://darvis-ai.github.io/stockey-ai/', // Your website URL
   // For github.io type URLs, you would set the url and baseUrl like:
-  url: 'https://darvis-ai.github.io',
-  baseUrl: '/stockey-ai/',
+  url: 'http://localhost:3000',
+  baseUrl: '/',
 
   // Used for publishing and more
   projectName: 'Stockey.ai',

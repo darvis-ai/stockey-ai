@@ -57,11 +57,98 @@ at first we start with encoder :
 
 
 ```
+
+
+## Decoder
+after reshapor we will make decoder Layer contains from LSTM Layer with returned sequences and 
+returned states called it "decoder"
+
+```python
+
+    # Decoder
+    reshapor = Reshape((1, 100), name='reshapor')
+    decoder = LSTM(units=100, return_sequences=True, return_state=True, name='decoder')
+
+```
+
+
+## Densor 
+after decoder layer we will make a TimeDistributed Denece Layer and we called it Time Densor
+after that we makes a small densor output it's units we called it output 
+```python
+    # Densor
+    #tdensor = TimeDistributed(Dense(units=200, activation='linear', name='time_densor'))
+    densor_output = Dense(units=feature_len, activation='linear', name='output')
+```
+
+
 ## Reshaper
-we will use this reshaper for  
+we will use this reshaper for  reshape the output from decoder for fitting with decoder
+called it "reshapor"
+
 
 
 ```python
+    # Decoder
+    reshapor = Reshape((1, 100), name='reshapor')
+```
+
+
+## Base model
+
+at first we will take all of encoder outputs and pass it from reshapor 
+then if you using densor layer you will pass input throw it
+
+```python
+    inputs = reshapor(encoder_outputs)
+    #inputs = tdensor(inputs)
+    all_outputs = []
+
+```
+
+second, for each sequence in daily trading sequences we will pass it throw decoder function with the initial state from encoder function 
+and the inputs will be the output from densor and we will take all states from decoder and save it after 
+
+```python
+
+    for _ in range(after_day):
+        outputs, h, c = decoder(inputs, initial_state=states)
+
+        #inputs = tdensor(outputs)
+        inputs = outputs
+        states = [state_h, state_c]
+
+        outputs = densor_output(outputs)
+        all_outputs.append(outputs)
+
+```
+third , we need to merge all of outputs and assign it as decoder outputs , right now we will create model from encoder inputs and decoder inputs
+
+```python
+    decoder_outputs = Lambda(lambda x: K.concatenate(x, axis=1))(all_outputs)
+    model = Model(inputs=encoder_inputs, outputs=decoder_outputs)
+
+```
+
+## Sequence to Sequence Model  (2D)
+
+```python
+def seq2seq(feature_len=1, after_day=1, input_shape=(20, 1)):
+    '''
+    Encoder:
+    X = Input sequence
+    C = LSTM(X); The context vector
+
+    Decoder:
+    y(t) = LSTM(s(t-1), y(t-1)); where s is the hidden state of the LSTM(h and c)
+    y(0) = LSTM(s0, C); C is the context vector from the encoder.
+    '''
+
+    # Encoder
+    encoder_inputs = Input(shape=input_shape) # (timesteps, feature)
+    encoder = LSTM(units=100, return_state=True,  name='encoder')
+    encoder_outputs, state_h, state_c = encoder(encoder_inputs)
+    states = [state_h, state_c]
 
     # Decoder
     reshapor = Reshape((1, 100), name='reshapor')
@@ -71,4 +158,26 @@ we will use this reshaper for
     #tdensor = TimeDistributed(Dense(units=200, activation='linear', name='time_densor'))
     densor_output = Dense(units=feature_len, activation='linear', name='output')
 
+    inputs = reshapor(encoder_outputs)
+    #inputs = tdensor(inputs)
+    all_outputs = []
+
+
+
+    for _ in range(after_day):
+        outputs, h, c = decoder(inputs, initial_state=states)
+
+        #inputs = tdensor(outputs)
+        inputs = outputs
+        states = [state_h, state_c]
+
+        outputs = densor_output(outputs)
+        all_outputs.append(outputs)
+
+    decoder_outputs = Lambda(lambda x: K.concatenate(x, axis=1))(all_outputs)
+    model = Model(inputs=encoder_inputs, outputs=decoder_outputs)
+
+    return model
+
 ```
+
